@@ -1,2 +1,20 @@
+My take on geohot's fromthetransistor operating system section (section 5)
+
 Kernel Design: Monolithic
+(C, ~2500 lines of code)
+
+OS developed using info from [https://wiki.osdev.org/Main_Page]
+
+Linux-ish:
+* only user space threads
+* open, read, write, close
+* fork, execve, wait, sleep, exit
+* mmap, munmap, mprotect
+* Consider the debug interface you are using, ranging from printf to perhaps a gdbremote stub into kernel
+
+TODO:
+* use a gcc cross-compiler for i686-elf
+* boot.s - kernel entry point that sets up the processor environment
+* kernel.c - the actual kernel routines
+* liner.ld - for linking the above files
 

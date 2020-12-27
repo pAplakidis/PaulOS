@@ -18,3 +18,8 @@ TODO:
 * kernel.c - the actual kernel routines
 * liner.ld - for linking the above files
 
+check out:
+* https://wiki.osdev.org/Getting_Started
+* https://wiki.osdev.org/Bare_Bones
+* https://wiki.osdev.org/GCC_Cross-Compiler
+

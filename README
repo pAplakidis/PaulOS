@@ -14,8 +14,6 @@ Linux-ish:
 
 TODO:
 * use a gcc cross-compiler for i686-elf
-* boot.s - kernel entry point that sets up the processor environment
-* kernel.c - the actual kernel routines
 * liner.ld - for linking the above files
 
 check out:

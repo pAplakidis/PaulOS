@@ -14,15 +14,31 @@ Linux-ish:
 
 HOW TO COMPILE:
 $ export PATH="$HOME/opt/cross/bin:$PATH"
-$ i686-elf-as boot.s -o boot.o
-$ i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+$ make
+
+Clean all binary files from compilation:
+$ make clean
+
+Check if the file is valid x86 multiboot:
+$ grub-file --is-x86-multiboot myos.bin && echo "OK"
+
+Build a bootable cdrom image:
+$ mkdir -p isodir/boot/grub
+$ cp myos.bin isodir/boot/myos.bin
+$ cp grub.cfg isodir/boot/grub/grub.cfg
+$ grub-mkrescue -o myos.iso isodir
+
+Test the operating system using QEMU:
+$ qemu-system-i386 -cdrom myos.iso
+
+For multiboot kernel (directly without bootable medium):
+$ qemu-system-i386 -kernel myos.bin
+
 
 TODO:
-* use a gcc cross-compiler for i686-elf
-* liner.ld - for linking the above files
+* build drivers and move past Bare Bones tutorial
 
 check out:
 * https://wiki.osdev.org/Getting_Started
 * https://wiki.osdev.org/Bare_Bones
-* https://wiki.osdev.org/GCC_Cross-Compiler
 

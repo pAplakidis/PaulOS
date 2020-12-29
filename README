@@ -12,6 +12,11 @@ Linux-ish:
 * mmap, munmap, mprotect
 * Consider the debug interface you are using, ranging from printf to perhaps a gdbremote stub into kernel
 
+HOW TO COMPILE:
+$ export PATH="$HOME/opt/cross/bin:$PATH"
+$ i686-elf-as boot.s -o boot.o
+$ i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+
 TODO:
 * use a gcc cross-compiler for i686-elf
 * liner.ld - for linking the above files

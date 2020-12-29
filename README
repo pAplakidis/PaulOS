@@ -36,6 +36,7 @@ $ qemu-system-i386 -kernel myos.bin
 
 
 TODO:
+* finish terminal driver (terminal scrilling, rendering colorful ASCII art, calling global constructors, meaty skeleton, going further, bare bones II)
 * build drivers and move past Bare Bones tutorial
 
 check out:

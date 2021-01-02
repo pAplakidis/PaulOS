@@ -1,6 +1,6 @@
 #!/bin/bash
 export PATH="$HOME/opt/cross/bin:$PATH"
-make
+make || exit 1
 
 grub-file --is-x86-multiboot myos.bin && echo "OK"
 mkdir -p isodir/boot/grub

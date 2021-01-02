@@ -57,7 +57,7 @@ void terminal_initialize(void){
   terminal_buffer = (uint16_t*) 0xB8000;
   
   for(size_t y = 0; y < VGA_HEIGHT; y++){
-    for(size_t x = 0; x<VGA_WIDTH; y++){
+    for(size_t x = 0; x<VGA_WIDTH; x++){
       const size_t index = y * VGA_WIDTH + x;
       terminal_buffer[index] = vga_entry(' ', terminal_color);
     }
@@ -73,18 +73,53 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y){
   terminal_buffer[index] = vga_entry(c, color);
 }
 
+// TODO: there might be more efficient ways of doing this, O(n^2)
+// TODO: debug this
+void terminal_scroll(){
+  uint16_t temp_buffer[VGA_HEIGHT-1][VGA_WIDTH];
+
+  // Copy terminal contents
+  for(size_t i=1; i<VGA_HEIGHT; i++){
+    for(size_t j=0; j<VGA_WIDTH; j++){
+      const size_t index = i * VGA_WIDTH + j;
+      temp_buffer[i-1][j] = terminal_buffer[index];
+    }
+  }
+
+  // Paste them one line above
+  for(size_t i=1; i<VGA_HEIGHT; i++){
+    for(size_t j=0; j<VGA_WIDTH; j++){
+      const size_t index = (i-1) * VGA_HEIGHT + j;
+      terminal_buffer[index] = temp_buffer[i][j];
+    }
+  }
+}
+
 void terminal_putchar(char c){
   // Handle newline
   if(c == '\n'){
     terminal_row++;
     terminal_column = 0;
   }
+  else{
 
-  terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-  if(++terminal_column == VGA_WIDTH){
+    terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+    // If we reach the end of a line, continue at the start of the next
+    if(++terminal_column == VGA_WIDTH){
+      terminal_column = 0;
+      terminal_row++;
+      /*
+      if(++terminal_row == VGA_HEIGHT)
+        terminal_row = 0;
+      */
+    }
+  }
+
+  // Scroll temrinal when we reach bottom
+  if(terminal_row >= VGA_HEIGHT-1){
     terminal_column = 0;
-    if(++terminal_row == VGA_HEIGHT)
-      terminal_row = 0;
+    terminal_scroll();
+    terminal_putentryat(c, terminal_color, terminal_column, VGA_HEIGHT-1);
   }
 }
 
@@ -97,12 +132,22 @@ void terminal_writestring(const char* data){
   terminal_write(data, strlen(data));
 }
 
+// MAIN
 void kernel_main(void){
   // initialize terminal interface
   terminal_initialize();
 
-  // TODO: newline support is left as an exercise
-  //terminal_writestring("Hello, kernel World!\n");
-  terminal_writestring("Hello, kernel World!");
+  terminal_writestring("Hello, kernel World!\nThis is Paul's Operating System\n");
+  terminal_writestring("Hello, kernel World!\nThis is Paul's Operating System\n");
+  terminal_writestring("Hello, kernel World!\nThis is Paul's Operating System\n");
+  terminal_writestring("Hello, kernel World!\nThis is Paul's Operating System\n");
+  terminal_writestring("Hello, kernel World!\nThis is Paul's Operating System\n");
+  terminal_writestring("Trying to\nReach the bottom\n");
+  terminal_writestring("Trying to\nReach the bottom\n");
+  terminal_writestring("Trying to\nReach the bottom\n");
+  terminal_writestring("Trying to\nReach the bottom\n");
+  terminal_writestring("Trying to\nReach the bottom\n");
+  terminal_writestring("Trying to\nReach the bottom\n");
+  //terminal_writestring("Trying to..\nReached it\n");
 }
 

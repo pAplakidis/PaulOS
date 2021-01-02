@@ -28,7 +28,9 @@ $ cp myos.bin isodir/boot/myos.bin
 $ cp grub.cfg isodir/boot/grub/grub.cfg
 $ grub-mkrescue -o myos.iso isodir
 
-OR just ./install.sh
+OR just ./install.sh (don't forget to chmod +x)
+
+To run just ./run.sh
 
 Test the operating system using QEMU:
 $ qemu-system-i386 -cdrom myos.iso
@@ -38,8 +40,7 @@ $ qemu-system-i386 -kernel myos.bin
 
 
 TODO:
-* make a shellscript to do the whole build
-* finish terminal driver (terminal scrilling, rendering colorful ASCII art, calling global constructors, meaty skeleton, going further, bare bones II)
+* finish terminal driver (terminal scrolling, rendering colorful ASCII art, calling global constructors, meaty skeleton, going further, bare bones II)
 * build drivers and move past Bare Bones tutorial
 
 check out:

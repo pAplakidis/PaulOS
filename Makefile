@@ -9,5 +9,6 @@ clean:
 	rm boot.o
 	rm kernel.o
 	rm myos.bin
+	rm -rf isodir
 
 

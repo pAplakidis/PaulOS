@@ -74,7 +74,7 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y){
 }
 
 void terminal_scroll(){
-  for(size_t y = 0; y < VGA_HEIGHT-1; y++){
+  for(size_t y = 0; y < VGA_HEIGHT; y++){
     for(size_t x = 0; x<VGA_WIDTH; x++){
       const size_t index1 = y * VGA_WIDTH + x;
       const size_t index2 = (y+1) * VGA_WIDTH + x;
@@ -104,7 +104,7 @@ void terminal_putchar(char c){
   }
 
   // Scroll temrinal when we reach bottom
-  if(terminal_row >= VGA_HEIGHT-1){
+  if(terminal_row >= VGA_HEIGHT){
     terminal_column = 0;
     terminal_row--;
     terminal_scroll();
@@ -140,6 +140,9 @@ void kernel_main(void){
   terminal_writestring("21) Trying to\n22) Reach the bottom\n");
   terminal_writestring("Trying to..\nReached it\n");
   terminal_writestring("Let's go further down\n");
-  terminal_writestring("Top should be at 4)\n");
+  // Test horizontal limit combined with scrolling
+  terminal_writestring("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATop should be at 4)\n");
+  // Test if we can actually write in line 25 (botton of the terminal)
+  terminal_writestring("Hello from the bottom!");
 }
 

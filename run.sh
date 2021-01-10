@@ -1,3 +1,3 @@
 #!/bin/bash
-qemu-system-i386 -cdrom isodir/myos.iso
+qemu-system-i386 -cdrom isodir/PaulOS.iso
 

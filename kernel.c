@@ -119,8 +119,8 @@ void terminal_write(const char* data, size_t size){
     // test different colors
     if(i <= 14)
       terminal_color = vga_entry_color(i+1, VGA_COLOR_BLACK);
-    }
     */
+    }
 }
 
 void terminal_writestring(const char* data){

@@ -42,7 +42,10 @@ $ qemu-system-i386 -kernel myos.bin
 
 
 TODO:
+* add CMakeLists.txt for cmake + maybe move .h files for kernel and userland in include/
 * finish terminal driver (meaty skeleton, going further, bare bones II)
+* output to a serial port to save debugging time
+* implement interrupts and syscalls and syscalls
 * build drivers and move past Bare Bones tutorial
 
 check out:

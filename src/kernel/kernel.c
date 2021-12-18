@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "tty/tty.h"
+#include "arch/x86/global_descriptor_table.h"
 
 // Check if the compiler thinks you are targeting the wrong operating system
 #if defined(__linux__)
@@ -32,5 +33,11 @@ void kernel_main(void){
   terminal_writestring("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATop should be at 4)\n");
   // Test if we can actually write in line 25 (botton of the terminal)
   terminal_writestring("Hello from the bottom!");
+
+  create_descriptor(0, 0, 0);
+  create_descriptor(0, 0x000fffff, (GDT_CODE_PL0));
+  create_descriptor(0, 0x000fffff, (GDT_DATA_PL0));
+  create_descriptor(0, 0x000fffff, (GDT_CODE_PL3));
+  create_descriptor(0, 0x000fffff, (GDT_DATA_PL3));
 }
 

@@ -2,7 +2,7 @@
 //#include <stddef.h>
 //#include <stdint.h>
 
-#include "kernel/tty.h"
+#include "tty/tty.h"
 
 // Check if the compiler thinks you are targeting the wrong operating system
 #if defined(__linux__)

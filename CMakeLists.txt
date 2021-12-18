@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(PaulOS)
+project(PaulOS C ASM)
 
 # TODO:
 #i686-elf-as boot.s -o boot.o
@@ -7,16 +7,22 @@ project(PaulOS)
 #i686-elf-gcc -T linker.ld -o PaulOS.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
 
 set(CMAKE_C_COMPILER i686-elf-gcc)
-set(CFLAGS "-std=gnu99 -ffreestanding -O2 -Wall -Wextra")
+enable_language(ASM-ATT)
+set(CMAKE_ASM_COMPILER i686-elf-as)
+#set(CFLAGS "-std=gnu99 -ffreestanding -O2 -Wall -Wextra")
 
-include_directories(src/)
+include_directories(src/kernel src/userland/libraries/libc)
 
 file(GLOB_RECURSE C_SRCS RELATIVE ${CMAKE_SOURCE_DIR} "src/*.c")
 #message(STATUS "c files: ${C_SRCS}")
+#message(STATUS "c flags: ${CFLAGS}")
+message(STATUS "asm compiler: ${CMAKE_ASM_COMPILER}")
+message(STATUS "c compiler: ${CMAKE_C_COMPILER}")
 
-enable_language(ASM-ATT)
+#add_compile_options(${CFLAGS})
+add_compile_options(-c -Wall -Wextra -O2 -ffreestanding -std=gnu99)  # TODO: use variable
 
-add_executable(boot src/boot.s)
-add_executable("${PROJECT_NAME}" ${C_SRCS})
-set_target_properties("${PROJECT_NAME}" PROPERTIES CFLAGS ${CFLAGS})
+add_library(boot.o src/boot.s)
+add_library("${PROJECT_NAME}.o" ${C_SRCS})
+#set_target_properties("${PROJECT_NAME}" PROPERTIES CFLAGS ${CFLAGS})
 

@@ -6,8 +6,7 @@
 #include <stddef.h>
 
 #include "vga.h"
-// TODO: include libc/string.h here to get strlen
-//#include ""
+#include "string.h"
 
 void terminal_initialize(void);
 void temrinal_putchar(char c);

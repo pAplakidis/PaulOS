@@ -1,6 +1,18 @@
 #include "global_descriptor_table.h"
 
-void encode_GDT_entry(uint8_t* target, struct GDT src){
+__attribute__((alligned(0x1000)))
+struct GDT default_GDT = {
+  {0, 0, 0, 0x00, 0x00, 0}, // null
+  {0, 0, 0, 0x9a, 0xa0, 0}, // kernel code semgent
+  {0, 0, 0, 0x92, 0xa0, 0}, // kernel data segment
+  {0, 0, 0, 0x00, 0x00, 0}, // user null
+  {0, 0, 0, 0x9a, 0xa0, 0}, // user code segment
+  {0, 0, 0, 0x92, 0xa0, 0}  // user data segment
+};
+
+// TODO: make this match current GDT_entry (just combine parts into limit, base and type)
+/*
+void encode_GDT_entry(uint8_t* target, struct GDT_entry src){
   // check if the limit can be encoded
   if((src.limit > 65536) && ((src.limit & 0xfff) != 0xfff)){
     // TODO: implement messages such as kerror
@@ -29,10 +41,10 @@ void encode_GDT_entry(uint8_t* target, struct GDT src){
   // encode the type
   target[5] = src.type;
 }
+*/
 
-// TODO: some assembly code is needed for telling the CPU where the table stands and reloading segment registers
-
-void create_descriptor(uint32_t base, uint32_t limit, uint16_t flag){
+// TODO: make this return a GDT_desc, assign the descriptor bits to the struct
+uint64_t create_descriptor(uint32_t base, uint32_t limit, uint16_t flag){
   uint64_t descriptor;
 
   // create the high 32 bit segment
@@ -40,4 +52,6 @@ void create_descriptor(uint32_t base, uint32_t limit, uint16_t flag){
   descriptor |= (flag << 8) & 0x00f0ff00;  // set type, p, dpl, s, g, d/b, l and avl fields
   descriptor |= (base >> 16) & 0x000000ff;  // set base bits 23:16
   descriptor |= base & 0xff000000;  // set base bits 31:24
+
+  return descriptor;
 }

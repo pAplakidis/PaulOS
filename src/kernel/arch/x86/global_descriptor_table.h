@@ -1,5 +1,4 @@
 #pragma once
-
 //#include <stdio.h>
 #include <stdint.h>
 
@@ -45,16 +44,32 @@
                      SEG_LONG(0)     | SEG_SIZE(1) | SEG_GRAN(1) | \
                      SEG_PRIV(3)     | SEG_DATA_RDWR
 
-typedef struct GDT_ptr{
+struct GDT_desc{
   uint16_t size;
-  void* addr;
-}GDT_ptr;
+  uint64_t offset;
+}__attribute__((packed));
 
-struct GDT{
-  uint32_t base;
-  uint32_t limit;
-  uint16_t type;
-};
+// Global Offset Table Descriptor
+typedef struct GDT_entry{
+  uint16_t limit0;
+  uint16_t base0;
+  uint8_t base1;
+  uint8_t accessbyte;
+  uint8_t limit1_flags;
+  uint8_t base2;
+}__attribute__((packed)) GDT_entry;
 
-void encode_GDT_entry(uint8_t* target, struct GDT src);
-void create_descriptor(uint32_t base, uint32_t limit, uint16_t flag);
+typedef struct GDT{
+  GDT_entry null; // 0x00
+  GDT_entry kernel_code;  // 0x08
+  GDT_entry kernel_data;  // 0x10
+  GDT_entry user_null;
+  GDT_entry user_code;
+  GDT_entry user_data;
+}__attribute__((packed)) __attribute__((aligned(0x1000))) GDT;
+
+//void encode_GDT_entry(uint8_t* target, struct GDT_entry src);
+uint64_t create_descriptor(uint32_t base, uint32_t limit, uint16_t flag);
+
+extern struct GDT default_GDT;
+extern void load_GDT(struct GDT_desc* gdt_desc);

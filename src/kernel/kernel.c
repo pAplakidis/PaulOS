@@ -34,10 +34,10 @@ void kernel_main(void){
   // Test if we can actually write in line 25 (botton of the terminal)
   terminal_writestring("Hello from the bottom!");
 
-  create_descriptor(0, 0, 0);
-  create_descriptor(0, 0x000fffff, (GDT_CODE_PL0));
-  create_descriptor(0, 0x000fffff, (GDT_DATA_PL0));
-  create_descriptor(0, 0x000fffff, (GDT_CODE_PL3));
-  create_descriptor(0, 0x000fffff, (GDT_DATA_PL3));
+  //init_GDT();
+  struct GDT_desc gdt_desc;
+  gdt_desc.size = sizeof(GDT) -1;
+  gdt_desc.offset = (uint64_t)&default_GDT;
+  load_GDT(&gdt_desc);
 }
 

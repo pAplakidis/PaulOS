@@ -14,8 +14,8 @@ set(CMAKE_ASM_COMPILER i686-elf-as)
 include_directories(src/kernel src/userland/libraries/libc)
 
 file(GLOB_RECURSE C_SRCS RELATIVE ${CMAKE_SOURCE_DIR} "src/*.c")
-#message(STATUS "c files: ${C_SRCS}")
-#message(STATUS "c flags: ${CFLAGS}")
+message(STATUS "c files: ${C_SRCS}")
+message(STATUS "c flags: ${CFLAGS}")
 message(STATUS "asm compiler: ${CMAKE_ASM_COMPILER}")
 message(STATUS "c compiler: ${CMAKE_C_COMPILER}")
 

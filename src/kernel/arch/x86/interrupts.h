@@ -2,6 +2,8 @@
 #include <stdbool.h>
 //#include <uavohottbridge.h>
 
+#include "interrupt_descriptor_table.h"
+
 /*
 struct interrupt_frame{
   uword_t ip;
@@ -17,16 +19,10 @@ priority of interrupts:
 0, 1, 2, 8, 9, 10, 11, 12, 13, 14, 15, 3, 4, 5, 6, 7
 */
 
-/*
-TODO:
-- implement GDT and IDT
-- make space for the interrupt descriptor table
-- tell the CPU where that space is
-- tell the PIC that you no longer want to use the BIOS defaults
-- write a couple of ISR handlers for both IRQs and exceptions
-- put the addresses of the ISR handlers in the appropriate descriptors
-- enable all supported interrupts in the IRQ mask
-*/
+struct interrupt_frame;
 
 //void interrupt_handler(struct interrupt_frame *frame);
+void prepare_interrupts();
 bool handle_interrupt(void);
+__attribute__((interrupt))
+void page_fault_handler(struct interrupt_frame* frame);

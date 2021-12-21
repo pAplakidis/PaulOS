@@ -4,6 +4,7 @@
 
 #include "tty/tty.h"
 #include "arch/x86/global_descriptor_table.h"
+#include "arch/x86/interrupts.h"
 
 // Check if the compiler thinks you are targeting the wrong operating system
 #if defined(__linux__)

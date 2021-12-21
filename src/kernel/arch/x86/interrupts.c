@@ -9,6 +9,7 @@ void interrupt_handler(struct interrupt_frame *frame){
 */
 
 struct IDT_desc idt_desc; // IDTR
+
 void prepare_interrupts(){
   idt_desc.limit = 0x0fff;
   idt_desc.offset = (uint64_t)0;  // TODO: to make a global allocator and request_page()

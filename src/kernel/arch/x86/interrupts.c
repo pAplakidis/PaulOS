@@ -1,13 +1,5 @@
 #include "interrupts.h"
 
-/*
-__attribute__ ((interrupt))
-void interrupt_handler(struct interrupt_frame *frame){
-  __asm__("pushad");
-  __asm__("popad; leavue; iret");
-}
-*/
-
 struct IDT_desc idt_desc; // IDTR
 
 void prepare_interrupts(){
@@ -22,8 +14,48 @@ void prepare_interrupts(){
   asm("lidt %0" : : "m" (idt_desc));
 }
 
+void handle_crash(void){
+
+}
+
+// TODO: this should decide which handler to call
 __attribute__((interrupt))
-void page_fault_handler(struct interrupt_frame* frame){
+void interrupt_handler(struct interrupt_frame *frame){
+  while(1);
+}
+
+__attribute__((interrupt))
+void page_fault_handler(struct interrupt_frame *frame){
   // TODO: print "Page fault detected" for debugging
+  while(1);
+}
+
+__attribute__((interrupt))
+void divide_handler(struct interrupt_frame *frame){
+  while(1);
+}
+
+__attribute__((interrupt))
+void debug_handler(struct interrupt_frame *frame){
+  while(1);
+}
+
+__attribute__((interrupt))
+void breakpoint_handler(struct interrupt_frame *frame){
+  while(1);
+}
+
+__attribute__((interrupt))
+void overflow_handler(struct interrupt_frame *frame){
+  while(1);
+}
+
+__attribute__((interrupt))
+void invalid_opcode_handler(struct interrupt_frame *frame){
+  while(1);
+}
+
+__attribute__((interrupt))
+void x87_fpoint_handler(struct interrupt_frame *frame){
   while(1);
 }

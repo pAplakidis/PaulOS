@@ -11,10 +11,14 @@
 #error "This tutorial needs to be compiled with a ix86-elf compiler"
 #endif 
 
-// MAIN
-void kernel_main(void){
+void kernel_init(){
   // initialize terminal interface
   terminal_initialize();
+}
+
+// MAIN
+void kernel_main(void){
+  kernel_init();
 
   // Test scrolling
   terminal_writestring("1) Hello, kernel World!\n2) This is Paul's Operating System\n");

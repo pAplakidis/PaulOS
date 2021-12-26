@@ -11,7 +11,7 @@ enable_language(ASM-ATT)
 set(CMAKE_ASM_COMPILER i686-elf-as)
 #set(CFLAGS "-std=gnu99 -ffreestanding -O2 -Wall -Wextra")
 
-include_directories(src/kernel src/userland/libraries/libc)
+include_directories(src/ src/userland/libraries/libc)
 
 file(GLOB_RECURSE C_SRCS RELATIVE ${CMAKE_SOURCE_DIR} "src/*.c")
 message(STATUS "c files: ${C_SRCS}")

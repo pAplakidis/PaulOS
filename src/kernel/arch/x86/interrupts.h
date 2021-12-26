@@ -8,6 +8,7 @@
 #define DIV_ZERO_ERROR      0x0
 #define DEBUG_EXC           0x1
 #define NON_MASKABLE_INT    0x2
+/*
 #define ERROR      0x3
 #define ERROR      0x4
 #define ERROR      0x5
@@ -32,6 +33,7 @@
 #define ERROR      0x1D
 #define ERROR      0x1E
 #define ERROR      0x1F
+*/
 
 /*
 priority of interrupts:
@@ -49,5 +51,5 @@ struct interrupt_frame{
 //void interrupt_handler(struct interrupt_frame *frame);
 void prepare_interrupts();
 bool handle_interrupt(void);
-__attribute__((interrupt))
+//__attribute__((interrupt))
 void interrupt_handler(struct interrupt_frame *frame);

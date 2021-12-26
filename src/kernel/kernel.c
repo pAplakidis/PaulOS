@@ -2,9 +2,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "tty/tty.h"
-#include "arch/x86/global_descriptor_table.h"
-#include "arch/x86/interrupts.h"
+#include "kernel/tty/tty.h"
+#include "kernel/kstdio.h"
+#include "kernel/arch/x86/global_descriptor_table.h"
+#include "kernel/arch/x86/interrupts.h"
 
 // Check if the compiler thinks you are targeting the wrong operating system
 #if defined(__linux__)

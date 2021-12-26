@@ -13,6 +13,7 @@ void kprintf(char* buf, const char* fmt){
 
   uint8_t *ptr;
 
+  // TODO: instead of printing on TTY, we can just make a proper buffer and then output it wherever we want
   // TODO: this is temp, need to make more generic (use lexical-analysis/NFA/DFA maybe?)
   for(ptr = fmt; *ptr != '\0'; ptr++){
     if(*ptr == "%"){

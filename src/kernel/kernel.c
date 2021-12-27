@@ -41,7 +41,8 @@ void kernel_main(void){
   terminal_writestring("Hello from the bottom!");
 
   // test printing integers
-  terminal_writestring(int_to_string(1234567890));
+  terminal_writestring(int_to_string((uint32_t)1234567890));
+  terminal_writestring(int_to_string((int32_t)-1234567890));
 
   //init_GDT();
   struct GDT_desc gdt_desc;

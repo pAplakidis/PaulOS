@@ -1,9 +1,27 @@
 #include "kstdio.h"
 
-char* int_to_string(int number){
-  char ret[BUF_SIZE];
+const char* int_to_string(uint32_t val){
+  char buf[BUF_SIZE];
 
-  return ret;
+  uint8_t size = 0;
+  uint32_t size_test = val;
+  while(size_test / 10 > 0){
+    size_test /= 10;
+    size++;
+  }
+
+  uint8_t idx = 0;
+  while(val / 10 > 0){
+    uint8_t remainder = val % 10;
+    val /= 10;
+    buf[size-idx] = remainder + '0';
+    idx++;
+  }
+  
+  uint8_t remainder = val % 10;
+  buf[size-idx] = remainder + '0';
+  buf[size-idx+1] = 0;
+  return buf;
 }
 
 // TODO: check out [https://stackoverflow.com/questions/54352400/implementation-of-printf-function]

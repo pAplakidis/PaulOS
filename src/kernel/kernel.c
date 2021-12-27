@@ -40,6 +40,9 @@ void kernel_main(void){
   // Test if we can actually write in line 25 (botton of the terminal)
   terminal_writestring("Hello from the bottom!");
 
+  // test printing integers
+  terminal_writestring(int_to_string(1234567890));
+
   //init_GDT();
   struct GDT_desc gdt_desc;
   gdt_desc.size = sizeof(GDT) -1;

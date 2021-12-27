@@ -1,6 +1,6 @@
 #include "kstdio.h"
 
-const char* int_to_string(uint32_t val){
+const char* uint_to_string(uint32_t val){
   char buf[BUF_SIZE];
 
   uint8_t size = 0;
@@ -53,6 +53,50 @@ const char* int_to_string(int32_t val){
   buf[is_negative+size-idx] = remainder + '0';
   buf[is_negative+size-idx+1] = 0;
   return buf;
+}
+
+const char* to_hstring(uint32_t val){
+
+}
+
+const char* double_d_to_string(double val, uint8_t decimal_places){
+  char* buf[BUF_SIZE];
+  char* int_ptr = (char*)to_string((int64_t)val);
+  char*double_ptr = buf;
+
+  if(decimal_places > 20)
+    decimal_places = 20;
+
+  if(val < 0){
+    val *= -1;
+  }
+
+  // copy the decimal part into the buffer
+  while(*int_ptr != 0){
+    *double_ptr = *int_ptr;
+    int_ptr++;
+    double_ptr++;
+  }
+
+  // add point
+  *double_ptr = '.';
+  double_ptr++;
+
+  // get the number after the decimal point
+  double new_val = val - (int32_t)val;
+  for(uint8_t i=0; i<decimal_places; i++){
+    new_val *= 10;
+    *double_ptr = (int32_t)new_val + '0';
+    new_val -= (int32_t)new_val;
+    double_ptr++;
+  }
+
+  *double_ptr = 0;
+  return buf;
+}
+
+const char* double_to_string(double val){
+  return double_d_to_string(val, 2);
 }
 
 // TODO: check out [https://stackoverflow.com/questions/54352400/implementation-of-printf-function]

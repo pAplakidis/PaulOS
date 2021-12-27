@@ -86,6 +86,49 @@ void terminal_writestring(const char* data){
   terminal_write(data, strlen(data));
 }
 
+// convert integer to string and print it
+void terminal_writedec(uint32_t val){
+  char buf[BUF_SIZE];
+
+  uint32_t n_width = 1;
+  uint32_t i = 9;
+  while(val > i && i < UINT32_MAX){
+    n_width += 1;
+    i *= 10;
+    i += 9;
+  }
+
+  int32_t printed = 0;
+  int32_t* ptr; // TODO: ptr might be cursor pointer, handle it better!
+  while(n_width + printed < VGA_WIDTH){
+    buf[*ptr] = '0';
+    (*ptr)++;
+    printed++;
+  }
+
+  i = n_width;
+  while(i > 0){
+    uint32_t n = val / 10;
+    int32_t r = val & 10;
+    buf[*ptr + i - 1] = r + '0';
+    i--;
+    val = n;
+  }
+  *ptr += n_width;
+
+  terminal_writestring((const char*)buf);
+
+  // TODO: maybe use these for now (or writestring(buf))
+  /*
+  terminal_putentryat('', terminal_color, terminal_column, terminal_row);
+  // If we reach the end of a line, continue at the start of the next
+  if(++terminal_column == VGA_WIDTH){
+    terminal_column = 0;
+    terminal_row++;
+  }
+  */
+}
+
 void terminal_clear(){
   for(size_t y = 0; y < VGA_HEIGHT; y++){
     for(size_t x = 0; x<VGA_WIDTH; x++){
@@ -94,4 +137,3 @@ void terminal_clear(){
     }
   }
 }
-

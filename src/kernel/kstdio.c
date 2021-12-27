@@ -7,7 +7,8 @@ char* int_to_string(int number){
 }
 
 // TODO: check out [https://stackoverflow.com/questions/54352400/implementation-of-printf-function]
-void kprintf(char* buf, const char* fmt){
+// and [https://github.com/stevej/osdev/blob/master/kernel/misc/kprintf.c]
+void kprintf(char* buf, const char* fmt, ...){
   va_list ap;
   va_start(ap, fmt);
 

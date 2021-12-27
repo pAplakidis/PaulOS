@@ -26,8 +26,8 @@ add_compile_options(-c -Wall -Wextra -O2 -ffreestanding -std=gnu99)  # TODO: use
 # $CC -mno-red-zone -mgeneral-regs-only -c .c -o .o
 
 # TODO: compile gdt.s as well
-add_library(boot.o src/boot.s)
 add_library("${PROJECT_NAME}.o" ${C_SRCS})  # TODO: each file must produce it's own .o
+add_library(boot.o src/boot.s)
 #set_target_properties("${PROJECT_NAME}" PROPERTIES CFLAGS ${CFLAGS})
 
 # TODO: link

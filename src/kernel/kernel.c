@@ -41,10 +41,16 @@ void kernel_main(void){
   terminal_writestring("Hello from the bottom!");
 
   // test printing integers
-  terminal_writestring(to_string((uint32_t)1234567890));
-  terminal_writestring(to_string((int32_t)-1234567890));
-  terminal_writestring(to_string((double)13.14));
-  terminal_writestring(to_string((double)-13.14));
+  terminal_writestring(uint_to_string((uint32_t)1234567890));
+  terminal_writestring("\n");
+  terminal_writestring(int_to_string((int32_t)-1234567890));
+  terminal_writestring("\n");
+  terminal_writestring(double_to_string((double)13.14));
+  terminal_writestring("\n");
+  terminal_writestring(double_to_string((double)-13.14));
+  terminal_writestring("\n");
+  terminal_writestring(to_hstring((uint32_t)0x1234));
+  terminal_writestring("\n");
 
   //init_GDT();
   struct GDT_desc gdt_desc;

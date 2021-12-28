@@ -56,7 +56,22 @@ const char* int_to_string(int32_t val){
 }
 
 const char* to_hstring(uint32_t val){
+  char buf[BUF_SIZE];
+  uint32_t* val_ptr = &val;
+  uint8_t* ptr;
+  uint8_t tmp;
+  uint8_t size = 8 * 2 - 1;
 
+  for(uint8_t i=0; i<size; i++){
+    ptr = ((uint8_t*)val_ptr + i);
+    tmp = (*ptr & 0xf0) >> 4;
+    buf[size - (i*2 + 1)] = tmp + (tmp > 9 ? 'A' : '0');
+    tmp = (*ptr & 0x0f);
+    buf[size - (i*2)] = tmp + (tmp > 9 ? 'A' : '0');
+  }
+
+  buf[size + 1] = 0;
+  return buf;
 }
 
 const char* double_d_to_string(double val, uint8_t decimal_places){

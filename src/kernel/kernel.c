@@ -12,9 +12,16 @@
 #error "This tutorial needs to be compiled with a ix86-elf compiler"
 #endif 
 
+struct GDT_desc gdt_desc;
+
 void kernel_init(){
   // initialize terminal interface
   terminal_initialize();
+
+  //init_GDT();
+  gdt_desc.size = sizeof(GDT) -1;
+  gdt_desc.offset = (uint64_t)&default_GDT;
+  load_GDT(&gdt_desc);
 }
 
 // MAIN
@@ -52,10 +59,5 @@ void kernel_main(void){
   terminal_writestring(to_hstring((uint32_t)0x1234));
   terminal_writestring("\n");
 
-  //init_GDT();
-  struct GDT_desc gdt_desc;
-  gdt_desc.size = sizeof(GDT) -1;
-  gdt_desc.offset = (uint64_t)&default_GDT;
-  load_GDT(&gdt_desc);
 }
 

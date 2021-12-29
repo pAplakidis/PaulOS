@@ -74,6 +74,44 @@ const char* to_hstring(uint32_t val){
   return buf;
 }
 
+const char* to_hstring_16(uint16_t val){
+  char buf[BUF_SIZE];
+  uint32_t* val_ptr = &val;
+  uint8_t* ptr;
+  uint8_t tmp;
+  uint8_t size = 8 * 2 - 1;
+
+  for(uint8_t i=0; i<size; i++){
+    ptr = ((uint8_t*)val_ptr + i);
+    tmp = (*ptr & 0xf0) >> 4;
+    buf[size - (i*2 + 1)] = tmp + (tmp > 9 ? 'A' : '0');
+    tmp = (*ptr & 0x0f);
+    buf[size - (i*2)] = tmp + (tmp > 9 ? 'A' : '0');
+  }
+
+  buf[size + 1] = 0;
+  return buf;
+}
+
+const char* to_hstring_8(uint8_t val){
+  char buf[BUF_SIZE];
+  uint32_t* val_ptr = &val;
+  uint8_t* ptr;
+  uint8_t tmp;
+  uint8_t size = 8 * 2 - 1;
+
+  for(uint8_t i=0; i<size; i++){
+    ptr = ((uint8_t*)val_ptr + i);
+    tmp = (*ptr & 0xf0) >> 4;
+    buf[size - (i*2 + 1)] = tmp + (tmp > 9 ? 'A' : '0');
+    tmp = (*ptr & 0x0f);
+    buf[size - (i*2)] = tmp + (tmp > 9 ? 'A' : '0');
+  }
+
+  buf[size + 1] = 0;
+  return buf;
+}
+
 const char* double_d_to_string(double val, uint8_t decimal_places){
   char* buf[BUF_SIZE];
   char* int_ptr = (char*)to_string((int64_t)val);
@@ -114,6 +152,18 @@ const char* double_to_string(double val){
   return double_d_to_string(val, 2);
 }
 
+// TODO: make the pointers args so that we copy at a specific point of the buffer
+// copy contents from one string buffer to another
+void copy_buffer(char* src, char* dest){
+  char* src_ptr = src;
+  char* dest_ptr = dest;
+
+  while(src_ptr != 0){
+    *dest_ptr = *src_ptr;
+    dest_ptr++;
+  }
+}
+
 // TODO: check out [https://stackoverflow.com/questions/54352400/implementation-of-printf-function]
 // and [https://github.com/stevej/osdev/blob/master/kernel/misc/kprintf.c]
 void kprintf(char* buf, const char* fmt, ...){
@@ -121,6 +171,7 @@ void kprintf(char* buf, const char* fmt, ...){
   va_start(ap, fmt);
 
   uint8_t *ptr;
+  char* buf_ptr = buf;
 
   // TODO: instead of printing on TTY, we can just make a proper buffer and then output it wherever we want
   // TODO: this is temp, need to make more generic (use lexical-analysis/NFA/DFA maybe?)
@@ -129,7 +180,8 @@ void kprintf(char* buf, const char* fmt, ...){
       ptr++;
       switch(*ptr){
         case 's':
-          terminal_writestring(va_arg(ap, uint8_t *));
+          // TODO: copy string arg to buf
+          //terminal_writestring(va_arg(ap, uint8_t *));
           break;
         case 'd':
           break;
@@ -139,11 +191,12 @@ void kprintf(char* buf, const char* fmt, ...){
       }
     }
     else{
-      // TODO: the tty stuff are temp, need to output to a serial port for debugcon
-      terminal_putchar(*ptr);
-      ptr++;
+      *buf_ptr = *ptr;
+      buf_ptr++;
     }
   }
 
   va_end(ap);
+  // TODO: the tty stuff are temp, need to output to a serial port for debugcon
+  terminal_writestring(buf);
 }

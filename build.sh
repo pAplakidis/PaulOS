@@ -9,9 +9,18 @@ echo "[+] Built image"
 cd ..
 
 # TODO: we get error no multibood header found!
-grub-file --is-x86-multiboot build/PaulOS.bin && echo "OK"
-mkdir -p isodir/boot/grub
-cp build/PaulOS.bin isodir/boot/PaulOS.bin
-cp grub.cfg isodir/boot/grub/grub.cfg
-grub-mkrescue -o PaulOS.iso isodir && mv PaulOS.iso isodir/PaulOS.iso
+if [[ -z "$1" ]]
+then
+  exit 0
+fi
+
+if [ $1 = "iso" ]
+then
+  echo "[+] Creating iso"
+  grub-file --is-x86-multiboot build/PaulOS.bin && echo "OK"
+  mkdir -p isodir/boot/grub
+  cp build/PaulOS.bin isodir/boot/PaulOS.bin
+  cp grub.cfg isodir/boot/grub/grub.cfg
+  grub-mkrescue -o PaulOS.iso isodir && mv PaulOS.iso isodir/PaulOS.iso
+fi
 

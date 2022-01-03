@@ -153,40 +153,50 @@ const char* double_to_string(double val){
 }
 
 // TODO: make the pointers args so that we copy at a specific point of the buffer
-// copy contents from one string buffer to another
-void copy_buffer(char* src, char* dest){
-  char* src_ptr = src;
-  char* dest_ptr = dest;
+// TODO: print to a serial port
+void serial_putch(char c){
 
-  while(src_ptr != 0){
-    *dest_ptr = *src_ptr;
-    dest_ptr++;
-  }
 }
 
 // TODO: check out [https://stackoverflow.com/questions/54352400/implementation-of-printf-function]
 // and [https://github.com/stevej/osdev/blob/master/kernel/misc/kprintf.c]
+
+// This behaves like sprintf(), buf can be used to print either on tty or on a serial port
 void kprintf(char* buf, const char* fmt, ...){
   va_list ap;
   va_start(ap, fmt);
 
   uint8_t *ptr;
   char* buf_ptr = buf;
+  char* src_ptr;
 
-  // TODO: instead of printing on TTY, we can just make a proper buffer and then output it wherever we want
-  // TODO: this is temp, need to make more generic (use lexical-analysis/NFA/DFA maybe?)
   for(ptr = fmt; *ptr != '\0'; ptr++){
     if(*ptr == "%"){
       ptr++;
       switch(*ptr){
+        case 'c':
+          *buf_ptr = *ptr;
+          buf_ptr++;
+          break;
         case 's':
-          // TODO: copy string arg to buf
-          //terminal_writestring(va_arg(ap, uint8_t *));
+          src_ptr = va_arg(ap, char *);
+          while(src_ptr != 0){
+            *buf_ptr = *src_ptr;
+            buf_ptr++;
+          }
           break;
         case 'd':
+          char* temp_buf = (char*)int_to_string(va_arg(ap, uint32_t *));
+          src_ptr = temp_buf;
+          while(src_ptr != 0){
+            *buf_ptr = *src_ptr;
+            buf_ptr++;
+          }
+          break;
+        case 'x':
+          // TODO: handle hex numbers here
           break;
         default:
-          // TODO: handle error
           break;
       }
     }
@@ -197,6 +207,6 @@ void kprintf(char* buf, const char* fmt, ...){
   }
 
   va_end(ap);
-  // TODO: the tty stuff are temp, need to output to a serial port for debugcon
+  // TODO: instead of printing on TTY, we can just make a proper buffer and then output it wherever we want
   terminal_writestring(buf);
 }

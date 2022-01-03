@@ -7,6 +7,7 @@ project(PaulOS C ASM)
 enable_language(ASM-ATT)
 set(CMAKE_ASM_COMPILER i686-elf-as)
 set(CMAKE_C_COMPILER i686-elf-gcc)
+set(CMAKE_ASM_NASM_OBJECT_FORMAT "elf")
 set(CFLAGS "-Wall -Wextra -O2 -ffreestanding -std=gnu99")
 set(CMAKE_C_FLAGS "${CFLAGS}")
 set(CMAKE_ASM_FLAGS "${CFLAGS}")
@@ -27,9 +28,13 @@ message(STATUS "c compiler: ${CMAKE_C_COMPILER}")
 
 # TODO: compile gdt.s as well
 #add_library(kernel.img STATIC ${C_SRCS} ${ASM_SRCS})
-add_library(kernel.img STATIC ${src/boot.s} ${C_SRCS})
+
+# TODO: compile with boot (we get errors due to file format?!)
+#add_library(kernel.img STATIC src/boot.s ${C_SRCS})
+
+add_library(kernel.img STATIC ${C_SRCS})
 
 add_custom_command(TARGET kernel.img POST_BUILD
-                   COMMAND i686-elf-gcc -T ${CMAKE_CURRENT_LIST_DIR}/linker.ld -o PaulOS.bin -ffreestanding -O2 -nostdlib ${CMAKE_BINARY_DIR}/libkernel.img.a -lgcc)
+                   COMMAND i686-elf-gcc -T${CMAKE_CURRENT_LIST_DIR}/linker.ld -o PaulOS.bin -ffreestanding -O2 -nostdlib ${CMAKE_BINARY_DIR}/libkernel.img.a -lgcc)
 #i686-elf-gcc -T linker.ld -o PaulOS.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
 

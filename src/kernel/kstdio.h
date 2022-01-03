@@ -16,4 +16,6 @@ const char* to_hstring_8(uint8_t val);
 const char* double_d_to_string(double val, uint8_t decimal_places);
 const char* double_to_string(double val);
 void print_dec(char* bug, uint32_t val);
+
+void serial_putch(char c);
 void kprintf(char* buf, const char* fmt, ...);

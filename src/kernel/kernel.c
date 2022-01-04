@@ -21,7 +21,7 @@ void kernel_init(){
   //init_GDT();
   gdt_desc.size = sizeof(GDT) -1;
   gdt_desc.offset = (uint64_t)&default_GDT;
-  load_GDT(&gdt_desc);
+  //load_GDT(&gdt_desc);
 }
 
 // MAIN
@@ -58,6 +58,14 @@ void kernel_main(void){
   terminal_writestring("\n");
   terminal_writestring(to_hstring((uint32_t)0x1234));
   terminal_writestring("\n");
+
+  // test kprintf
+  char* buf[BUF_SIZE];
+  kprintf(buf, "Hello World!\n");
+  terminal_writestring(buf);
+
+  kprintf(buf, "I am number %d!\n", 1);
+  terminal_writestring(buf);
 
 }
 

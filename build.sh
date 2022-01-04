@@ -1,6 +1,10 @@
 #!/bin/bash
 export PATH="$HOME/opt/cross/bin:$PATH"
 
+# TODO: this is a temp hack, need to do this in CMake
+#i686-elf-as src/boot.s -o boot.o
+#echo "[+] Bootloader done"
+
 mkdir -p build
 cd build
 cmake ..
@@ -8,7 +12,6 @@ make || exit 1
 echo "[+] Built image"
 cd ..
 
-# TODO: we get error no multibood header found!
 if [[ -z "$1" ]]
 then
   exit 0

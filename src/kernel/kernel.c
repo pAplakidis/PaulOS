@@ -8,9 +8,11 @@
 #include "kernel/arch/x86/interrupts.h"
 
 // Check if the compiler thinks you are targeting the wrong operating system
+/*
 #if defined(__linux__)
 #error "This tutorial needs to be compiled with a ix86-elf compiler"
 #endif 
+*/
 
 struct GDT_desc gdt_desc;
 

@@ -177,6 +177,7 @@ void kprintf(const char* fmt, ...){
   uint8_t *ptr;
   char* buf_ptr = buf;
   char* src_ptr;
+  char* temp_buf;
 
   for(ptr = fmt; *ptr != '\0'; ptr++){
     if(*ptr == "%"){
@@ -194,7 +195,7 @@ void kprintf(const char* fmt, ...){
           }
           break;
         case 'd':
-          char* temp_buf = (char*)int_to_string(va_arg(ap, uint32_t *));
+          temp_buf = (char*)int_to_string(va_arg(ap, uint32_t *));
           src_ptr = temp_buf;
           while(src_ptr != 0){
             *buf_ptr = *src_ptr;
@@ -215,5 +216,5 @@ void kprintf(const char* fmt, ...){
   }
 
   va_end(ap);
-  // TODO: use serial_putc here
+  serial_puts(buf);
 }

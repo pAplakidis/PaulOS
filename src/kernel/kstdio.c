@@ -152,17 +152,25 @@ const char* double_to_string(double val){
   return double_d_to_string(val, 2);
 }
 
-// TODO: make the pointers args so that we copy at a specific point of the buffer
-// TODO: print to a serial port
 void serial_putch(char c){
+  // output to QEMU debugcon
+  out8(0xe9, (uint8_t)c);
+}
 
+void serial_puts(const char* buf){
+  char *buf_ptr = buf;
+  while(buf_ptr != 0){
+    serial_putch(*buf_ptr);
+    buf_ptr++;
+  }
 }
 
 // TODO: check out [https://stackoverflow.com/questions/54352400/implementation-of-printf-function]
 // and [https://github.com/stevej/osdev/blob/master/kernel/misc/kprintf.c]
 
 // This behaves like sprintf(), buf can be used to print either on tty or on a serial port
-void kprintf(char* buf, const char* fmt, ...){
+void kprintf(const char* fmt, ...){
+  char* buf[BUF_SIZE];
   va_list ap;
   va_start(ap, fmt);
 
@@ -207,4 +215,5 @@ void kprintf(char* buf, const char* fmt, ...){
   }
 
   va_end(ap);
+  // TODO: use serial_putc here
 }

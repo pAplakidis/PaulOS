@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 #include "kernel/tty/tty.h"
+#include "kernel/arch/x86/io.h"
 
 // TODO: replace uint32_t with uint64_t since we have 64bit descritor tables, etc
 const char* uint_to_string(uint32_t val);
@@ -18,4 +19,4 @@ const char* double_to_string(double val);
 void print_dec(char* bug, uint32_t val);
 
 void serial_putch(char c);
-void kprintf(char* buf, const char* fmt, ...);
+void kprintf(const char* fmt, ...);

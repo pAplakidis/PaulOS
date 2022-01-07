@@ -34,8 +34,9 @@ QEMU_ARGS=(
           # to qemu => debug output
           "-debugcon"
           # or "/dev/stdout" => it appears in terminal window
+          "/dev/stdout"
           # this is poorly documented! I found out by coincidence, that I can use a file like this
-          "file:qemu/debugcon.txt"
+          #"file:qemu/debugcon.txt"
           # Setup monitor
           "-monitor"
           "vc:1024x768"

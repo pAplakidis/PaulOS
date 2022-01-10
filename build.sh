@@ -1,14 +1,12 @@
 #!/bin/bash
 export PATH="$HOME/opt/cross/bin:$PATH"
 
-# TODO: this is a temp hack, need to do this in CMake
-#i686-elf-as src/boot.s -o boot.o
-#echo "[+] Bootloader done"
-
 mkdir -p build
 cd build
 cmake ..
 make || exit 1
+#/usr/bin/ld -m elf_i686 -T../link.ld -o PaulOS.bin ./libkernel.img.a || exit 1
+#i686-elf-gcc -T../linker.ld -o PaulOS.bin -ffreestanding -O2 -nostdlib ./libkernel.img.a -lgcc
 echo "[+] Built image"
 cd ..
 

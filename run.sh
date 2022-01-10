@@ -2,27 +2,27 @@
 QEMU_ARGS=(
           # Disable default devices
           # QEMU by default enables a ton of devices which slow down boot.
-          "-nodefaults"
+          #"-nodefaults"
           # Use a standard VGA for graphics
-          "-vga"
-          "std"
+          #"-vga"
+          #"std"
           # Use a modern machine, with acceleration if possible.
-          "-machine"
+          #"-machine"
           # "q35" # also works, but slower
           # Interesting to see how this changes CPU-ID
           # Without KVM the Hypervisor is QEMU, else its KVM
-          "q35,accel=kvm:tcg"
+          #"q35,accel=kvm:tcg"
           # Allocate some memory
-          "-m"
-          "128M"
+          #"-m"
+          #"128M"
           # Set up OVMF
-          "-drive"
-          "if=pflash,format=raw,readonly,file=${OVMF_FW_PATH}"
-          "-drive"
-          "if=pflash,format=raw,file=${OVMF_VARS_PATH}"
+          #"-drive"
+          #"if=pflash,format=raw,readonly,file=${OVMF_FW_PATH}"
+          #"-drive"
+          #"if=pflash,format=raw,file=${OVMF_VARS_PATH}"
           # Mount a local directory as a FAT partition
-          "-drive"
-          "format=raw,file=fat:rw:${QEMU_VOLUME_DIR}"
+          #"-drive"
+          #"format=raw,file=fat:rw:${QEMU_VOLUME_DIR}"
           # Enable serial
           #
           # Connect the serial port to the host. OVMF is kind enough to connect
@@ -38,10 +38,11 @@ QEMU_ARGS=(
           # this is poorly documented! I found out by coincidence, that I can use a file like this
           #"file:qemu/debugcon.txt"
           # Setup monitor
-          "-monitor"
-          "vc:1024x768"
+          #"-monitor"
+          #"vc:1024x768"
 )
 
 echo "Executing: qemu-system-x86_64 " "${QEMU_ARGS[@]}"
-qemu-system-i386 -cdrom isodir/PaulOS.iso
+qemu-system-i386 "${QEMU_ARGS[@]}" -cdrom isodir/PaulOS.iso
+#qemu-system-x86_64 "${QEMU_ARGS[@]}" -cdrom isodir/PaulOS.iso
 

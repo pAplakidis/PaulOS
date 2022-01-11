@@ -47,7 +47,7 @@
 // GDTR
 struct GDT_desc{
   uint16_t size;
-  uint64_t offset;
+  uint32_t offset;
 }__attribute__((packed));
 
 // Global Offset Table Descriptor
@@ -70,7 +70,7 @@ typedef struct GDT{
 }__attribute__((packed)) __attribute__((aligned(0x1000))) GDT;
 
 //void encode_GDT_entry(uint8_t* target, struct GDT_entry src);
-uint64_t create_descriptor(uint32_t base, uint32_t limit, uint16_t flag);
+uint32_t create_descriptor(uint32_t base, uint32_t limit, uint16_t flag);
 
 extern struct GDT default_GDT;
 //extern void load_GDT(struct GDT_desc* gdt_desc);

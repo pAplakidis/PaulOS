@@ -8,7 +8,7 @@
 // IDTR
 struct IDT_desc{
   uint16_t limit;
-  uint64_t offset;
+  uint32_t offset;
 }__attribute__((packed));
 
 typedef struct IDT_entry{
@@ -22,5 +22,5 @@ typedef struct IDT_entry{
 }__attribute__((packed)) IDT_entry;
 
 // for IDTR
-void idtr_set_offset(uint64_t offset, struct IDT_entry* idt_entry);
-uint64_t idtr_get_offset(struct IDT_entry idt_entry);
+void idtr_set_offset(uint32_t offset, struct IDT_entry* idt_entry);
+uint32_t idtr_get_offset(struct IDT_entry idt_entry);

@@ -7,7 +7,6 @@
 #include "kernel/tty/tty.h"
 #include "kernel/arch/x86/io.h"
 
-// TODO: replace uint32_t with uint64_t since we have 64bit descritor tables, etc
 const char* uint_to_string(uint32_t val);
 const char* int_to_string(int32_t val);
 const char* to_hstring(uint32_t val);

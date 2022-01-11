@@ -44,8 +44,8 @@ void encode_GDT_entry(uint8_t* target, struct GDT_entry src){
 */
 
 // TODO: make this return a GDT_desc, assign the descriptor bits to the struct
-uint64_t create_descriptor(uint32_t base, uint32_t limit, uint16_t flag){
-  uint64_t descriptor;
+uint32_t create_descriptor(uint32_t base, uint32_t limit, uint16_t flag){
+  uint32_t descriptor;
 
   // create the high 32 bit segment
   descriptor = limit & 0x000f0000;  // set limit bits 19:16

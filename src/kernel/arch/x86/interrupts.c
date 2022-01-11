@@ -51,10 +51,10 @@ void x87_fpoint_handler(struct interrupt_frame *frame){
 
 void prepare_interrupts(){
   idt_desc.limit = 0x0fff;
-  idt_desc.offset = (uint64_t)0;  // TODO: to make a global allocator and request_page()
+  idt_desc.offset = (uint32_t)0;  // TODO: to make a global allocator and request_page()
 
   IDT_entry* int_page_fault = (IDT_entry*)(idt_desc.offset + 0xe * sizeof(IDT_entry));
-  idtr_set_offset((uint64_t)page_fault_handler, int_page_fault);
+  idtr_set_offset((uint32_t)page_fault_handler, int_page_fault);
   int_page_fault->type_attr = IDT_TA_InterruptGate;
   int_page_fault->selector = 0x08;
 

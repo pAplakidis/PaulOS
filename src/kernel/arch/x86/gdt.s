@@ -1,4 +1,4 @@
-[bits 64]
+[bits 32]
 
 load_GDT:
   lgdt [rdi]

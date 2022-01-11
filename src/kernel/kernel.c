@@ -16,13 +16,15 @@
 
 struct GDT_desc gdt_desc;
 
+// TODO: change GDT and IDT from 64bit to 32bit!!!
+
 void kernel_init(){
   // initialize terminal interface
   terminal_initialize();
 
   //init_GDT();
   gdt_desc.size = sizeof(GDT) -1;
-  gdt_desc.offset = (uint64_t)&default_GDT;
+  gdt_desc.offset = (uint32_t)&default_GDT;
   //load_GDT(&gdt_desc);
 }
 
@@ -62,12 +64,8 @@ void kernel_main(void){
   terminal_writestring("\n");
 
   // test kprintf
-  char* buf[BUF_SIZE];
-  kprintf(buf, "Hello World!\n");
-  terminal_writestring(buf);
-
-  kprintf(buf, "I am number %d!\n", 1);
-  terminal_writestring(buf);
+  kprintf("Hello World!\n");
+  kprintf("I am number %d!\n", 1);
 
 }
 

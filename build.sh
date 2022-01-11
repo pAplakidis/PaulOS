@@ -2,11 +2,11 @@
 export PATH="$HOME/opt/cross/bin:$PATH"
 
 mkdir -p build
+i686-elf-as src/boot.s -o build/boot.o  || exit 1  # TODO: this is temporary
 cd build
 cmake ..
 make || exit 1
-#/usr/bin/ld -m elf_i686 -T../link.ld -o PaulOS.bin ./libkernel.img.a || exit 1
-#i686-elf-gcc -T../linker.ld -o PaulOS.bin -ffreestanding -O2 -nostdlib ./libkernel.img.a -lgcc
+cat boot.o PaulOS.bin > PaulOS.bin
 echo "[+] Built image"
 cd ..
 
@@ -18,7 +18,14 @@ fi
 if [ $1 = "iso" ]
 then
   echo "[+] Creating iso"
-  grub-file --is-x86-multiboot build/PaulOS.bin && echo "OK"
+  
+  if grub-file --is-x86-multiboot build/PaulOS.bin; then
+    echo "[+] Multiboot Confirmed"
+  else
+    echo "[-] ERROR: File is not multiboot!"
+    exit 1
+  fi
+  
   mkdir -p isodir/boot/grub
   cp build/PaulOS.bin isodir/boot/PaulOS.bin
   cp grub.cfg isodir/boot/grub/grub.cfg

@@ -40,6 +40,15 @@ $ qemu-system-i386 -cdrom myos.iso
 For multiboot kernel (directly without bootable medium):
 $ qemu-system-i386 -kernel myos.bin
 
+STEPS:
+- interrupt handlers
+- process management
+- shell
+- paging + memory map (physical first, then paging)
+- usermode -> syscalls (open, read, write, ...)
+- drivers(?)
+- filesystem
+
 
 TODO:
 * fix cmake

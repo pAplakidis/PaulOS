@@ -51,10 +51,9 @@ STEPS:
 
 
 TODO:
+* maybe move everything to C++
 * fix cmake
-* finish terminal driver (meaty skeleton, going further, bare bones II)
-* output to a serial port to save debugging time
-* implement interrupts and syscalls and syscalls
+* implement interrupts and syscalls
 * plan memory map (virtual and physical)
 * malloc/free (mmap, munmap, mprotect)
 * open, read, write, close

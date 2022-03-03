@@ -114,7 +114,7 @@ const char* to_hstring_8(uint8_t val){
 
 const char* double_d_to_string(double val, uint8_t decimal_places){
   char* buf[BUF_SIZE];
-  char* int_ptr = (char*)int_to_string((int64_t)val);
+  char* int_ptr = (char*)int_to_string((int32_t)val);
   char*double_ptr = buf;
 
   if(decimal_places > 20)

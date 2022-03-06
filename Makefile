@@ -1,18 +1,25 @@
 SRC_DIR = src/
 KERNEL_DIR = src/kernel/
 BUILD_DIR = build/
+LIBC_DIR = src/userland/libraries/libc
 
-C_SRCS := $(shell find $(SOURCEDIR) -name '*.c')
+INC=-I$(SRC_DIR) -I$(LIBC_DIR)
+
+C_SRCS := $(shell find $(SOURCEDIR) -type f -name '*.c')
+OBJ := $(C_SRCS:.c=.o)
 KS_SRCS := $(shell find $(KERNEL_DIR) -name '*.s')
-OBJS := $(patsubst $(C_SRCS), %.o, $(C_SRCS))
+#OBJS := $(patsubst $(C_SRCS), %.o, $(C_SRCS))
 
 CC := i686-elf-gcc
 AS := i686-elf-as
 CFLAGS := -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+LDFLAGS := -ffreestanding -O2 -nostdlib
+
+
 
 $(info $$C_SRCS is [${C_SRCS}])
 
-all: kernel
+
 
 #compile: $(OBJS)
 	#i686-elf-as $(SRC_DIR)boot.s -o $(BUILD_DIR)boot.o
@@ -23,10 +30,17 @@ all: kernel
 #$(BUILD_DIR)%.o: $(SRC_DIR)%.c
 #	$(CC) -I$(SRC_DIR) -c $< -o $@ $(CFLAGS)
 
-PaulOS.bin: $(OBJS) ./linker.ld
-  $(CC) -T ./linker.ld -o $@ -ffreestanding -O2 -nostdlib $@ -lgcc
+all: PaulOS.bin
+
+PaulOS.bin: $(OBJ) boot ./linker.ld
+	$(CC) -T ./linker.ld -o $@ $(LDFLAGS) $(OBJ) -lgcc
+	echo "[+] Linked objects"
 
 %.o: %.c
-  @$(CC) -MD $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
+	echo "[+] C sources built"
 
+boot: $(SRC_DIR)boot.s
+	i686-elf-as $< -o boot.o
+	echo "[+] Boot built"
 

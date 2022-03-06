@@ -51,8 +51,8 @@ STEPS:
 
 
 TODO:
+* output object files in build/ (modify Makefile)
 * maybe move everything to C++
-* fix cmake
 * implement interrupts and syscalls
 * plan memory map (virtual and physical)
 * malloc/free (mmap, munmap, mprotect)

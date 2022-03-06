@@ -1,5 +1,6 @@
 #!/bin/bash
 rm -rf ./build/
 rm -rf ./isodir/
-rm *.o
+#rm -r *.o
+find . -name "*.o" -type f -delete
 

@@ -7,8 +7,8 @@ export PATH="$HOME/opt/cross/bin:$PATH"
 #cmake ..
 make || exit 1
 #cat boot.o PaulOS.bin > PaulOS.bin
-echo "[+] Built image"
-cd ..
+tput setaf 2; echo "[+] Built image"
+#cd ..
 
 if [[ -z "$1" ]]
 then
@@ -17,12 +17,12 @@ fi
 
 if [ $1 = "iso" ]
 then
-  echo "[+] Creating iso"
+  tput setaf 2; echo "[+] Creating iso"
   
   if grub-file --is-x86-multiboot ./PaulOS.bin; then
-    echo "[+] Multiboot Confirmed"
+    tput setaf 2; echo "[+] Multiboot Confirmed"
   else
-    echo "[-] ERROR: File is not multiboot!"
+    tput setaf 1; echo "[-] ERROR: File is not multiboot!"
     exit 1
   fi
   

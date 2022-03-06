@@ -32,15 +32,15 @@ $(info $$C_SRCS is [${C_SRCS}])
 
 all: PaulOS.bin
 
-PaulOS.bin: $(OBJ) boot ./linker.ld
-	$(CC) -T ./linker.ld -o $@ $(LDFLAGS) $(OBJ) -lgcc
+PaulOS.bin: $(OBJ) boot.o ./linker.ld
+	$(CC) -T ./linker.ld -o $@ $(LDFLAGS) boot.o $(OBJ) -lgcc || echo "[-] Link failed"
 	echo "[+] Linked objects"
 
 %.o: %.c
 	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
 	echo "[+] C sources built"
 
-boot: $(SRC_DIR)boot.s
+boot.o: $(SRC_DIR)boot.s
 	i686-elf-as $< -o boot.o
 	echo "[+] Boot built"
 

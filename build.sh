@@ -1,12 +1,12 @@
-#!/bin/bash
+#/bin/bash
 export PATH="$HOME/opt/cross/bin:$PATH"
 
-mkdir -p build
-i686-elf-as src/boot.s -o build/boot.o  || exit 1  # TODO: this is temporary
-cd build
-cmake ..
+#mkdir -p build
+i686-elf-as src/boot.s -o boot.o  || exit 1  # TODO: this is temporary
+#cd build
+#cmake ..
 make || exit 1
-cat boot.o PaulOS.bin > PaulOS.bin
+#cat boot.o PaulOS.bin > PaulOS.bin
 echo "[+] Built image"
 cd ..
 

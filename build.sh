@@ -19,7 +19,7 @@ if [ $1 = "iso" ]
 then
   echo "[+] Creating iso"
   
-  if grub-file --is-x86-multiboot build/PaulOS.bin; then
+  if grub-file --is-x86-multiboot ./PaulOS.bin; then
     echo "[+] Multiboot Confirmed"
   else
     echo "[-] ERROR: File is not multiboot!"
@@ -27,7 +27,7 @@ then
   fi
   
   mkdir -p isodir/boot/grub
-  cp build/PaulOS.bin isodir/boot/PaulOS.bin
+  cp ./PaulOS.bin isodir/boot/PaulOS.bin
   cp grub.cfg isodir/boot/grub/grub.cfg
   grub-mkrescue -o PaulOS.iso isodir && mv PaulOS.iso isodir/PaulOS.iso
 fi

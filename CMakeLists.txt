@@ -27,10 +27,20 @@ message(STATUS "c compiler: ${CMAKE_C_COMPILER}")
 # TODO: compile gdt.s as well
 #add_library(kernel.img STATIC ${kernel_ASM_SRCS} ${C_SRCS})
 
-add_library(PaulOS.img STATIC
-                       ${C_SRCS})
+#add_library(PaulOS.img STATIC
+#                       ${C_SRCS})
 
-add_custom_command(TARGET PaulOS.img
-                   POST_BUILD
-                   COMMAND i686-elf-gcc -T ${CMAKE_CURRENT_LIST_DIR}/linker.ld -o PaulOS.bin -ffreestanding -O2 -nostdlib ${CMAKE_BINARY_DIR}/libPaulOS.img.a -lgcc)
+#add_custom_command(TARGET PaulOS.img
+#                   POST_BUILD
+#                   COMMAND i686-elf-gcc -T ${CMAKE_CURRENT_LIST_DIR}/linker.ld -o PaulOS.bin -ffreestanding -O2 -nostdlib ${CMAKE_BINARY_DIR}/libPaulOS.img.a -lgcc)
+
+# TODO: check this tutorial out [https://wiki.osdev.org/CMake_Build_System]
+foreach(I ${FIRST_SRCS})
+  list(APPEND TMP_FIRST_SRCS ${CMAKE_CURRENT_LIST_DIR}/${I})
+endforeach(I)
+
+#set(FIRST_SRCS ${TMP_FIRST_SRCS})
+
+add_executable(PaulOS ${C_SRCS} src/boot.s)
+set_target_properties(PaulOS PROPERTIES LINK_FLAGS "-T ${CMAKE_CURRENT_LIST_DIR}/linker.ld -o PaulOS.bin -ffreestanding -O2 -nostdlib -lgcc")
 

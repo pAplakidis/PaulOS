@@ -50,6 +50,9 @@ STEPS:
 - filesystem
 
 
+Small Optional Tweaks:
+- have CMakeLists.txt, one in kernel, one in libc and one in the root of project (add_subdirectory(src/kernel), ...)
+
 TODO:
 * maybe move everything to C++
 * fix cmake

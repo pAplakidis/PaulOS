@@ -51,6 +51,7 @@ void kernel_main(void){
   // Test if we can actually write in line 25 (botton of the terminal)
   terminal_writestring("Hello from the bottom!");
 
+  /*
   // test printing integers
   terminal_writestring(uint_to_string((uint32_t)1234567890));
   terminal_writestring("\n");
@@ -66,6 +67,7 @@ void kernel_main(void){
   // test kprintf
   kprintf("Hello World!\n");
   kprintf("I am number %d!\n", 1);
+  */
 
 }
 

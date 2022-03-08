@@ -51,23 +51,24 @@ void kernel_main(void){
   // Test if we can actually write in line 25 (botton of the terminal)
   terminal_writestring("Hello from the bottom!");
 
-  /*
   // test printing integers
   terminal_writestring(uint_to_string((uint32_t)1234567890));
   terminal_writestring("\n");
   terminal_writestring(int_to_string((int32_t)-1234567890));
   terminal_writestring("\n");
+  /*
+  // TODO: these crash the system
   terminal_writestring(double_to_string((double)13.14));
   terminal_writestring("\n");
   terminal_writestring(double_to_string((double)-13.14));
   terminal_writestring("\n");
+  */
   terminal_writestring(to_hstring((uint32_t)0x1234));
   terminal_writestring("\n");
 
   // test kprintf
   kprintf("Hello World!\n");
-  kprintf("I am number %d!\n", 1);
-  */
+  kprintf("I am number %d!\n", 1);  // This is incorrect!
 
 }
 

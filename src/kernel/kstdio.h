@@ -7,6 +7,7 @@
 #include "kernel/tty/tty.h"
 #include "kernel/arch/x86/io.h"
 
+// TODO: these functions are wrong!!
 const char* uint_to_string(uint32_t val);
 const char* int_to_string(int32_t val);
 const char* to_hstring(uint32_t val);

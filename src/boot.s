@@ -8,7 +8,7 @@
 /*
 Delcare a mutliboot header that marks the program as a kernel. These are magic values thar are documented in the multiboot standard. The bootloader will search for this signature in the first 8 KB of the kernel file, aligned at a 32-bit boundary. The signature is in its own section so the header can be forced to be within the first 8 KB of the kernel file
 */
-.section  .mutliboot
+.section  .multiboot
 .align    4
 .long     MAGIC
 .long     FLAGS

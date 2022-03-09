@@ -7,7 +7,7 @@
 #include <stddef.h>
 
 #include "kernel/arch/x86/vga.h"
-#include "string.h"
+#include "kernel/string.h"
 
 void terminal_initialize(void);
 void terminal_putchar(char c);

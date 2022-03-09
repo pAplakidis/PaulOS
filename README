@@ -14,31 +14,17 @@ Linux-ish:
 * mmap, munmap, mprotect
 * Consider the debug interface you are using, ranging from printf to perhaps a gdbremote stub into kernel
 
-HOW TO COMPILE:
-$ export PATH="$HOME/opt/cross/bin:$PATH"
-$ make
+Build:
+./build.sh
 
-Clean all binary files from compilation:
-$ make clean
+Clean:
+./clean.sh
 
-Check if the file is valid x86 multiboot:
-$ grub-file --is-x86-multiboot myos.bin && echo "OK"
-
-Build a bootable cdrom image:
-$ mkdir -p isodir/boot/grub
-$ cp myos.bin isodir/boot/myos.bin
-$ cp grub.cfg isodir/boot/grub/grub.cfg
-$ grub-mkrescue -o myos.iso isodir
-
-OR just ./install.sh (don't forget to chmod +x)
-
-To run just ./run.sh
-
-Test the operating system using QEMU:
-$ qemu-system-i386 -cdrom myos.iso
+Run (using qemu-system-i386):
+./run.sh
 
 For multiboot kernel (directly without bootable medium):
-$ qemu-system-i386 -kernel myos.bin
+$ qemu-system-i386 -kernel PaulOS.bin
 
 STEPS:
 - interrupt handlers
@@ -52,15 +38,17 @@ STEPS:
 
 TODO:
 * output object files in build/ (modify Makefile)
-* maybe move everything to C++
+* fix numeric to string convertions
+
 * implement interrupts and syscalls
 * plan memory map (virtual and physical)
+* move on with syscalls
 * malloc/free (mmap, munmap, mprotect)
 * open, read, write, close
 * fork, execve, wait, sleep, exit
 * build drivers
 
 check out:
-* https://wiki.osdev.org/Getting_Started
-* https://wiki.osdev.org/Bare_Bones
+- https://wiki.osdev.org/Main_Page
+- https://github.com/SerenityOS/serenity
 

@@ -1,7 +1,25 @@
 #include "kstdio.h"
 
+char buf[BUF_SIZE];
+char serial_stdout[BUF_SIZE];
+
+// TODO: add '\0' at the end of every string!!!
+
+void reset_buf(){
+  for(int i=0; i<BUF_SIZE; i++){
+    buf[i] = 0x0;
+  }
+}
+
+void reset_sstdout(){
+  for(int i=0; i<BUF_SIZE; i++){
+    serial_stdout[i] = 0x0;
+  }
+}
+
+
 const char* uint_to_string(uint32_t val){
-  char buf[BUF_SIZE];
+  reset_buf();
 
   uint8_t size = 0;
   uint32_t size_test = val;
@@ -20,12 +38,12 @@ const char* uint_to_string(uint32_t val){
   
   uint8_t remainder = val % 10;
   buf[size-idx] = remainder + '0';
-  buf[size-idx+1] = 0;
+  buf[size+1] = 0;
   return buf;
 }
 
 const char* int_to_string(int32_t val){
-  char buf[BUF_SIZE];
+  reset_buf();
 
   uint8_t is_negative = 0;
   if(val < 0){
@@ -51,12 +69,13 @@ const char* int_to_string(int32_t val){
   
   uint8_t remainder = val % 10;
   buf[is_negative+size-idx] = remainder + '0';
-  buf[is_negative+size-idx+1] = 0;
+  buf[is_negative+size+1] = 0;
   return buf;
 }
 
 const char* to_hstring(uint32_t val){
-  char buf[BUF_SIZE];
+  reset_buf();
+
   uint32_t* val_ptr = &val;
   uint8_t* ptr;
   uint8_t tmp;
@@ -75,7 +94,8 @@ const char* to_hstring(uint32_t val){
 }
 
 const char* to_hstring_16(uint16_t val){
-  char buf[BUF_SIZE];
+  reset_buf();
+
   uint32_t* val_ptr = &val;
   uint8_t* ptr;
   uint8_t tmp;
@@ -94,7 +114,8 @@ const char* to_hstring_16(uint16_t val){
 }
 
 const char* to_hstring_8(uint8_t val){
-  char buf[BUF_SIZE];
+  reset_buf();
+
   uint32_t* val_ptr = &val;
   uint8_t* ptr;
   uint8_t tmp;
@@ -113,6 +134,8 @@ const char* to_hstring_8(uint8_t val){
 }
 
 const char* double_d_to_string(double val, uint8_t decimal_places){
+  reset_buf();
+
   char* buf[BUF_SIZE];
   char* int_ptr = (char*)int_to_string((int32_t)val);
   char*double_ptr = buf;
@@ -170,12 +193,13 @@ void serial_puts(const char* buf){
 
 // This behaves like sprintf(), buf can be used to print either on tty or on a serial port
 void kprintf(const char* fmt, ...){
-  char* buf[BUF_SIZE];
+  reset_sstdout();
+
   va_list ap;
   va_start(ap, fmt);
 
   uint8_t *ptr;
-  char* buf_ptr = buf;
+  char* buf_ptr = serial_stdout;
   char* src_ptr;
   char* temp_buf;
 
@@ -216,5 +240,5 @@ void kprintf(const char* fmt, ...){
   }
 
   va_end(ap);
-  serial_puts(buf);
+  serial_puts(serial_stdout);
 }

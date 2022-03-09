@@ -3,9 +3,6 @@ PaulOS
 My take on geohot's fromthetransistor operating system section (section 5)
 
 Kernel Design: Monolithic
-(C, ~2500 lines of code)
-
-OS developed using info from [https://wiki.osdev.org/Main_Page]
 
 Linux-ish:
 * only user space threads
@@ -13,6 +10,16 @@ Linux-ish:
 * fork, execve, wait, sleep, exit
 * mmap, munmap, mprotect
 * Consider the debug interface you are using, ranging from printf to perhaps a gdbremote stub into kernel
+
+
+Requirements:
+- make
+- cross compiler for i386 (check out [https://wiki.osdev.org/GCC_Cross-Compiler])
+- grub
+- xorriso
+- qemu
+NOTE: these requriements are not exactly the packages needed to be installed
+
 
 Build:
 ./build.sh
@@ -26,12 +33,13 @@ Run (using qemu-system-i386):
 For multiboot kernel (directly without bootable medium):
 $ qemu-system-i386 -kernel PaulOS.bin
 
+
 STEPS:
 - interrupt handlers
 - process management
-- shell
 - paging + memory map (physical first, then paging)
 - usermode -> syscalls (open, read, write, ...)
+- shell
 - drivers(?)
 - filesystem
 

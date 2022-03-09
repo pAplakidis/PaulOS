@@ -3,8 +3,6 @@
 char buf[BUF_SIZE];
 char serial_stdout[BUF_SIZE];
 
-// TODO: add '\0' at the end of every string!!!
-
 void reset_buf(){
   for(int i=0; i<BUF_SIZE; i++){
     buf[i] = 0x0;
@@ -136,13 +134,13 @@ const char* to_hstring_8(uint8_t val){
 const char* double_d_to_string(double val, uint8_t decimal_places){
   reset_buf();
 
-  char* buf[BUF_SIZE];
   char* int_ptr = (char*)int_to_string((int32_t)val);
   char*double_ptr = buf;
 
   if(decimal_places > 20)
     decimal_places = 20;
 
+  // TODO: maybe handle negative values as well
   if(val < 0){
     val *= -1;
   }
@@ -180,10 +178,12 @@ void serial_putch(char c){
   out8(0xe9, (uint8_t)c);
 }
 
+// TODO: bug here!!!! (keeps printing until it crashes)
 void serial_puts(const char* buf){
   char *buf_ptr = buf;
   while(buf_ptr != 0){
     serial_putch(*buf_ptr);
+    //terminal_putchar(*buf_ptr); // NOTE: temp for debugging
     buf_ptr++;
   }
 }
@@ -218,6 +218,7 @@ void kprintf(const char* fmt, ...){
             buf_ptr++;
           }
           break;
+        // TODO: this still prints the %d instead of the number
         case 'd':
           temp_buf = (char*)int_to_string(va_arg(ap, uint32_t *));
           src_ptr = temp_buf;
@@ -240,5 +241,6 @@ void kprintf(const char* fmt, ...){
   }
 
   va_end(ap);
-  serial_puts(serial_stdout);
+  terminal_writestring(serial_stdout);
+  //serial_puts(serial_stdout); // TODO: BUG HERE (seems to crash)
 }

@@ -12,7 +12,7 @@
 void terminal_initialize(void);
 void terminal_putchar(char c);
 void terminal_write(const char* data, size_t size);
-void terminal_writestring(const char* data);
+void tputs(const char* data);
 void terminal_writedec(uint32_t val);
 void terminal_clear();
 

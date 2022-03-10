@@ -33,23 +33,26 @@ void kernel_main(void){
   kinit();
 
   // test printing integers
-  terminal_writestring(uint_to_string((uint32_t)1234567890));
-  terminal_writestring("\n");
-  terminal_writestring(int_to_string((int32_t)-1234567890));
-  terminal_writestring("\n");
-  terminal_writestring(double_to_string((double)13.14));
-  terminal_writestring("\n");
-  terminal_writestring(double_to_string((double)-13.14));
-  terminal_writestring("\n");
+  tputs(uint_to_string((uint32_t)1234567890));
+  tputs("\n");
+  tputs(int_to_string((int32_t)-1234567890));
+  tputs("\n");
+  tputs(double_to_string((double)13.14));
+  tputs("\n");
+  tputs(double_to_string((double)-13.14));
+  tputs("\n");
 
   // TODO: debug this
-  //terminal_writestring(to_hstring((uint32_t)0x1234));
+  //terminal_writestring(to_hstring((uint32_t)0x1234ABCDEF));
   //terminal_writestring("\n");
 
   // test kprintf (needs debugging)
   kprintf("Hello World!\n");
   kprintf("This is Mr Kernel\n");
-  kprintf("I am number %d!\n", 1);
+  kprintf("Testing char %c\n", 'a');
+  kprintf("Testing string %s\n", "random stuff");
+  kprintf("Testing number %d\n", 10);
+  kprintf("I am number %d, %c!\n", 1, 'A');
   char *temp_buf = "Testing serial!\n";
   serial_puts(temp_buf);
 

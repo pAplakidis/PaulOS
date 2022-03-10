@@ -1,6 +1,8 @@
 #include "kstdio.h"
 
+// TODO: create separate buffers above each to_string function!!!
 char buf[BUF_SIZE];
+char hbuf[BUF_SIZE];
 char serial_stdout[BUF_SIZE];
 
 void reset_buf(){
@@ -9,12 +11,17 @@ void reset_buf(){
   }
 }
 
+void reset_hbuf(){
+  for(int i=0; i<BUF_SIZE; i++){
+    hbuf[i] = 0x0;
+  }
+}
+
 void reset_sstdout(){
   for(int i=0; i<BUF_SIZE; i++){
     serial_stdout[i] = 0x0;
   }
 }
-
 
 const char* uint_to_string(uint32_t val){
   reset_buf();
@@ -71,8 +78,9 @@ const char* int_to_string(int32_t val){
   return buf;
 }
 
+// TODO: BUG HERE, prints crap
 const char* to_hstring(uint32_t val){
-  reset_buf();
+  reset_hbuf();
 
   uint32_t* val_ptr = &val;
   uint8_t* ptr;
@@ -82,13 +90,13 @@ const char* to_hstring(uint32_t val){
   for(uint8_t i=0; i<size; i++){
     ptr = ((uint8_t*)val_ptr + i);
     tmp = (*ptr & 0xf0) >> 4;
-    buf[size - (i*2 + 1)] = tmp + (tmp > 9 ? 'A' : '0');
+    hbuf[size - (i*2 + 1)] = tmp + (tmp > 9 ? 'A' : '0');
     tmp = (*ptr & 0x0f);
-    buf[size - (i*2)] = tmp + (tmp > 9 ? 'A' : '0');
+    hbuf[size - (i*2)] = tmp + (tmp > 9 ? 'A' : '0');
   }
 
-  buf[size + 1] = 0;
-  return buf;
+  hbuf[size + 1] = 0;
+  return hbuf;
 }
 
 const char* to_hstring_16(uint16_t val){
@@ -132,7 +140,7 @@ const char* to_hstring_8(uint8_t val){
 }
 
 const char* double_d_to_string(double val, uint8_t decimal_places){
-  reset_buf();
+  reset_hbuf();
 
   char* int_ptr = (char*)int_to_string((int32_t)val);
   char*double_ptr = buf;
@@ -140,7 +148,6 @@ const char* double_d_to_string(double val, uint8_t decimal_places){
   if(decimal_places > 20)
     decimal_places = 20;
 
-  // TODO: maybe handle negative values as well
   if(val < 0){
     val *= -1;
   }
@@ -204,27 +211,24 @@ void kprintf(const char* fmt, ...){
   char* temp_buf;
 
   for(ptr = fmt; *ptr != '\0'; ptr++){
-    if(*ptr == "%"){
+    if(*ptr == '%'){
       ptr++;
       switch(*ptr){
         case 'c':
-          *buf_ptr = *ptr;
-          buf_ptr++;
+          *buf_ptr++ = (char)va_arg(ap, int);
           break;
+        // TODO: these two need debugging
         case 's':
-          src_ptr = va_arg(ap, char *);
-          while(src_ptr != 0){
-            *buf_ptr = *src_ptr;
-            buf_ptr++;
+          src_ptr = (char*)va_arg(ap, char *);
+          while(*src_ptr != 0){
+            *buf_ptr++ = *src_ptr++;
           }
           break;
-        // TODO: this still prints the %d instead of the number
         case 'd':
-          temp_buf = (char*)int_to_string(va_arg(ap, uint32_t *));
+          temp_buf = (char*)int_to_string((int32_t)va_arg(ap, int32_t *));
           src_ptr = temp_buf;
-          while(src_ptr != 0){
-            *buf_ptr = *src_ptr;
-            buf_ptr++;
+          while(*src_ptr != 0){
+            *buf_ptr++ = *src_ptr++;
           }
           break;
         case 'x':
@@ -235,12 +239,11 @@ void kprintf(const char* fmt, ...){
       }
     }
     else{
-      *buf_ptr = *ptr;
-      buf_ptr++;
+      *buf_ptr++ = *ptr;
     }
   }
 
   va_end(ap);
-  terminal_writestring(serial_stdout);
+  tputs(serial_stdout);
   //serial_puts(serial_stdout); // TODO: BUG HERE (seems to crash)
 }

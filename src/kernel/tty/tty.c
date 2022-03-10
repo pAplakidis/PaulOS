@@ -82,7 +82,7 @@ void terminal_write(const char* data, size_t size){
     }
 }
 
-void terminal_writestring(const char* data){
+void tputs(const char* data){
   terminal_write(data, kstrlen(data));
 }
 
@@ -116,7 +116,7 @@ void terminal_writedec(uint32_t val){
   }
   *ptr += n_width;
 
-  terminal_writestring((const char*)buf);
+  tputs((const char*)buf);
 
   // TODO: maybe use these for now (or writestring(buf))
   /*

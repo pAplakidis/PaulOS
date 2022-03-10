@@ -2,10 +2,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "kernel/tty/tty.h"
+#include <kernel/tty/tty.h>
 #include "kernel/kstdio.h"
-#include "kernel/arch/x86/global_descriptor_table.h"
-#include "kernel/arch/x86/interrupts.h"
+#include <kernel/arch/x86/global_descriptor_table.h>
+#include <kernel/arch/x86/interrupts.h>
 
 // Check if the compiler thinks you are targeting the wrong operating system
 /*
@@ -25,6 +25,7 @@ void kinit(){
   //init_GDT();
   gdt_desc.size = sizeof(GDT) -1;
   gdt_desc.offset = (uint32_t)&default_GDT;
+  kprintf("GDT size: %d\n", gdt_desc.size);
   kprintf("GDT offset: 0x%x\n", gdt_desc.offset);
   //load_GDT(&gdt_desc);  // TODO: this crashes
 }
@@ -33,7 +34,7 @@ void kinit(){
 void kernel_main(void){
   kinit();
 
-  // test printing integers
+  // test printing integers on tty
   tputs(uint_to_string((uint32_t)1234567890));
   tputs("\n");
   tputs(int_to_string((int32_t)-1234567890));

@@ -46,6 +46,7 @@ STEPS:
 
 TODO:
 * output object files in build/ (modify Makefile)
+* replace "" with <> in includes
 
 * implement interrupts and exceptions
 * plan memory map (virtual and physical)

@@ -73,4 +73,4 @@ typedef struct GDT{
 uint32_t create_descriptor(uint32_t base, uint32_t limit, uint16_t flag);
 
 extern struct GDT default_GDT;
-//extern void load_GDT(struct GDT_desc* gdt_desc);
+extern void load_GDT(struct GDT_desc* gdt_desc);

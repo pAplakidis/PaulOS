@@ -5,8 +5,8 @@ LIBC_DIR = src/userland/libraries/libc
 
 INC=-I$(SRC_DIR) -I$(LIBC_DIR)
 
-C_SRCS := $(shell find $(SOURCEDIR) -type f -name '*.c')
-AS_SRCS := $(shell find $(KERNEL_DIR) -type f -name '*.S')
+C_SRCS := $(shell find $(SRC_DIR) -type f -name '*.c')
+AS_SRCS := $(shell find $(SRC_DIR) -type f -name '*.S')
 OBJ := $(C_SRCS:.c=.o)
 OBJ += $(AS_SRCS:.s=.o)
 
@@ -20,8 +20,8 @@ $(info $$AS_SRCS is [${AS_SRCS}])
 
 all: PaulOS.bin
 
-PaulOS.bin: $(OBJ) boot.o ./linker.ld
-	$(CC) -T ./linker.ld -o $@ $(LDFLAGS) boot.o $(OBJ) -lgcc
+PaulOS.bin: $(OBJ) ./linker.ld
+	$(CC) -T ./linker.ld -o $@ $(LDFLAGS) $(OBJ) -lgcc
 	echo "[+] Linked objects"
 
 .c.o: %.c
@@ -32,7 +32,7 @@ PaulOS.bin: $(OBJ) boot.o ./linker.ld
 	$(AS) $< -o $@
 	echo "[+] AS sources built"
 
-boot.o: $(SRC_DIR)boot.S
-	$(AS) $< -o boot.o
-	echo "[+] Boot built"
+#boot.o: $(SRC_DIR)boot.S
+#	$(AS) $< -o boot.o
+#	echo "[+] Boot built"
 

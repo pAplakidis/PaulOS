@@ -1,5 +1,6 @@
 #include "kstdio.h"
 
+// TODO: prevent buffer overflow!!! (kprintf behaves weird when fmt is long enough)
 char buf[BUF_SIZE];
 char hbuf[BUF_SIZE];
 char k_stdout[BUF_SIZE];

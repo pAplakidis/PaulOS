@@ -25,7 +25,8 @@ void kinit(){
   //init_GDT();
   gdt_desc.size = sizeof(GDT) -1;
   gdt_desc.offset = (uint32_t)&default_GDT;
-  //load_GDT(&gdt_desc);
+  kprintf("GDT offset: 0x%x\n", gdt_desc.offset);
+  //load_GDT(&gdt_desc);  // TODO: this crashes
 }
 
 // MAIN
@@ -41,8 +42,6 @@ void kernel_main(void){
   tputs("\n");
   tputs(double_to_string((double)-13.14));
   tputs("\n");
-
-  // TODO: debug this
   tputs(hex_to_string((uint32_t)0x1234abcd));
   tputs("\n");
 

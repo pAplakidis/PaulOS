@@ -1,5 +1,5 @@
 #pragma once
-#define BUF_SIZE        64
+#define BUF_SIZE  128
 
 #include <stdarg.h>
 #include <stdint.h>

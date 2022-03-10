@@ -46,9 +46,8 @@ STEPS:
 
 TODO:
 * output object files in build/ (modify Makefile)
-* fix numeric to string convertions
 
-* implement interrupts and syscalls
+* implement interrupts and exceptions
 * plan memory map (virtual and physical)
 * move on with syscalls
 * malloc/free (mmap, munmap, mprotect)

@@ -43,18 +43,18 @@ void kernel_main(void){
   tputs("\n");
 
   // TODO: debug this
-  //terminal_writestring(to_hstring((uint32_t)0x1234ABCDEF));
-  //terminal_writestring("\n");
+  tputs(hex_to_string((uint32_t)0x1234abcd));
+  tputs("\n");
 
-  // test kprintf (needs debugging)
+  // test kprintf
   kprintf("Hello World!\n");
   kprintf("This is Mr Kernel\n");
   kprintf("Testing char %c\n", 'a');
   kprintf("Testing string %s\n", "random stuff");
-  kprintf("Testing number %d\n", 10);
+  kprintf("Testing decimal %d\n", 10);
+  kprintf("Testing hex 0x%x\n", 0x1234cdef);
+  kprintf("Testing float %f\n", 3.14);
+  kprintf("Testing negative float %f\n", -3.14);
   kprintf("I am number %d, %c!\n", 1, 'A');
-  char *temp_buf = "Testing serial!\n";
-  serial_puts(temp_buf);
-
 }
 

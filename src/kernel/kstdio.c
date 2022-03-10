@@ -1,9 +1,8 @@
 #include "kstdio.h"
 
-// TODO: create separate buffers above each to_string function!!!
 char buf[BUF_SIZE];
 char hbuf[BUF_SIZE];
-char serial_stdout[BUF_SIZE];
+char k_stdout[BUF_SIZE];
 
 void reset_buf(){
   for(int i=0; i<BUF_SIZE; i++){
@@ -17,9 +16,9 @@ void reset_hbuf(){
   }
 }
 
-void reset_sstdout(){
+void reset_kstdout(){
   for(int i=0; i<BUF_SIZE; i++){
-    serial_stdout[i] = 0x0;
+    k_stdout[i] = 0x0;
   }
 }
 
@@ -78,65 +77,31 @@ const char* int_to_string(int32_t val){
   return buf;
 }
 
-// TODO: BUG HERE, prints crap
-const char* to_hstring(uint32_t val){
+const char* hex_to_string(uint32_t val){
   reset_hbuf();
 
-  uint32_t* val_ptr = &val;
-  uint8_t* ptr;
-  uint8_t tmp;
-  uint8_t size = 8 * 2 - 1;
+  int i = 8;
+  char* ptr = hbuf;
 
-  for(uint8_t i=0; i<size; i++){
-    ptr = ((uint8_t*)val_ptr + i);
-    tmp = (*ptr & 0xf0) >> 4;
-    hbuf[size - (i*2 + 1)] = tmp + (tmp > 9 ? 'A' : '0');
-    tmp = (*ptr & 0x0f);
-    hbuf[size - (i*2)] = tmp + (tmp > 9 ? 'A' : '0');
+  uint32_t n_width = 1;
+  uint32_t j = 0x0f;
+  while(val > j && j < UINT32_MAX){
+      n_width++;
+      j *= 0x10;
+      j += 0x0f;
   }
 
-  hbuf[size + 1] = 0;
+  while(i > (int)n_width){
+    *ptr++ = '0';
+    i--;
+  }
+
+  i = (int)n_width;
+  while(i-- > 0){
+      *ptr++ = "0123456789abcdef"[(val>>(i*4))&0xf];
+  }
+
   return hbuf;
-}
-
-const char* to_hstring_16(uint16_t val){
-  reset_buf();
-
-  uint32_t* val_ptr = &val;
-  uint8_t* ptr;
-  uint8_t tmp;
-  uint8_t size = 8 * 2 - 1;
-
-  for(uint8_t i=0; i<size; i++){
-    ptr = ((uint8_t*)val_ptr + i);
-    tmp = (*ptr & 0xf0) >> 4;
-    buf[size - (i*2 + 1)] = tmp + (tmp > 9 ? 'A' : '0');
-    tmp = (*ptr & 0x0f);
-    buf[size - (i*2)] = tmp + (tmp > 9 ? 'A' : '0');
-  }
-
-  buf[size + 1] = 0;
-  return buf;
-}
-
-const char* to_hstring_8(uint8_t val){
-  reset_buf();
-
-  uint32_t* val_ptr = &val;
-  uint8_t* ptr;
-  uint8_t tmp;
-  uint8_t size = 8 * 2 - 1;
-
-  for(uint8_t i=0; i<size; i++){
-    ptr = ((uint8_t*)val_ptr + i);
-    tmp = (*ptr & 0xf0) >> 4;
-    buf[size - (i*2 + 1)] = tmp + (tmp > 9 ? 'A' : '0');
-    tmp = (*ptr & 0x0f);
-    buf[size - (i*2)] = tmp + (tmp > 9 ? 'A' : '0');
-  }
-
-  buf[size + 1] = 0;
-  return buf;
 }
 
 const char* double_d_to_string(double val, uint8_t decimal_places){
@@ -182,13 +147,14 @@ const char* double_to_string(double val){
 
 void serial_putch(char c){
   // output to QEMU debugcon
+  if(c == '\n')
+    out8(0xe9, '\r'); // TODO: need to check for double '\r' (if previous c was \r then no need to put it again)
   out8(0xe9, (uint8_t)c);
 }
 
-// TODO: bug here!!!! (keeps printing until it crashes)
 void serial_puts(const char* buf){
   char *buf_ptr = buf;
-  while(buf_ptr != 0){
+  while(*buf_ptr != 0){
     serial_putch(*buf_ptr);
     //terminal_putchar(*buf_ptr); // NOTE: temp for debugging
     buf_ptr++;
@@ -199,14 +165,15 @@ void serial_puts(const char* buf){
 // and [https://github.com/stevej/osdev/blob/master/kernel/misc/kprintf.c]
 
 // This behaves like sprintf(), buf can be used to print either on tty or on a serial port
+int to_serial = 1;
 void kprintf(const char* fmt, ...){
-  reset_sstdout();
+  reset_kstdout();
 
   va_list ap;
   va_start(ap, fmt);
 
   uint8_t *ptr;
-  char* buf_ptr = serial_stdout;
+  char* buf_ptr = k_stdout;
   char* src_ptr;
   char* temp_buf;
 
@@ -217,7 +184,6 @@ void kprintf(const char* fmt, ...){
         case 'c':
           *buf_ptr++ = (char)va_arg(ap, int);
           break;
-        // TODO: these two need debugging
         case 's':
           src_ptr = (char*)va_arg(ap, char *);
           while(*src_ptr != 0){
@@ -231,8 +197,20 @@ void kprintf(const char* fmt, ...){
             *buf_ptr++ = *src_ptr++;
           }
           break;
+        // TODO: handle hex and floats here
         case 'x':
-          // TODO: handle hex numbers here
+          temp_buf = (char*)hex_to_string((uint32_t)va_arg(ap, uint32_t *));
+          src_ptr = temp_buf;
+          while(*src_ptr != 0){
+            *buf_ptr++ = *src_ptr++;
+          }
+          break;
+        case 'f':
+          temp_buf = (char*)double_to_string((double)va_arg(ap, double));
+          src_ptr = temp_buf;
+          while(*src_ptr != 0){
+            *buf_ptr++ = *src_ptr++;
+          }
           break;
         default:
           break;
@@ -244,6 +222,8 @@ void kprintf(const char* fmt, ...){
   }
 
   va_end(ap);
-  tputs(serial_stdout);
-  //serial_puts(serial_stdout); // TODO: BUG HERE (seems to crash)
+  if(to_serial)
+    serial_puts(k_stdout);
+  else
+    tputs(k_stdout);
 }
